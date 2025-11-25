@@ -7,7 +7,7 @@ class Employer(User):
     company = db.Column(db.String(100), nullable=False)
     positions = db.relationship("Position", back_populates="employer")
 
-    __mapper_args__={"polymorphic identity" : "employer"}
+    __mapper_args__={"polymorphic_identity" : "employer"}
 
     def __init__(self, username, password, email, company, phone_number=None):
         super().__init__(username, password, email, phone_number)
