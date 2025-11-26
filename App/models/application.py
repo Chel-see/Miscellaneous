@@ -26,6 +26,8 @@ class Application(db.Model):
             self.context.setState(ShortListedState())
         elif isinstance(self.context.state, ShortListedState): #Shortlisted -> Accepted / Rejected
             self.context.state.next_decision(newStatus)
+        elif newStatus == "withdrawn" #Student withdraws from position
+            self.context.setState(RejectedState())
         self.status = self.context.state.name
         db.session.commit()
 
