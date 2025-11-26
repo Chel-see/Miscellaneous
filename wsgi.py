@@ -5,6 +5,7 @@ from App.database import db, get_migrate
 from App.models import User
 from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users, initialize, open_position, add_student_to_shortlist, decide_shortlist, get_shortlist_by_student, get_shortlist_by_position, get_positions_by_employer)
+from App.controllers.shortlist import *
 
 
 # This commands file allow you to create convenient CLI commands for testing controllers
@@ -133,6 +134,32 @@ def get_positions_by_employer_command(employer_id):
     else:
             print(f'Employer {employer_id} has no positions')
             print("\n\n__________________________________________________________________________\n\n")
+
+@user_cli.command("withdraw_application", help="Withdraw an application")
+@click.argument("student_id", default=1)
+@click.argument("position_id", default=1)
+def withdraw_application_command(student_id, position_id):
+    shortlists = get_shortlist_by_position(position_id)
+    if not shortlists:
+        print(f'No shortlists found for the Position: {position_id}')
+        print("\n\n__________________________________________________________________________\n\n")
+        return
+
+    shortlist = next((s for s in shortlists if s.student_id == student_id), None)
+    if not shortlist:
+        print(f'No shortlist found for Student: {student_id} in Position: {position_id}')
+        print("\n\n__________________________________________________________________________\n\n")
+        return
+
+    if shortlist.isWithdrawn:
+        print(f'Student {student_id} has already withdrawn application for position {position_id}')
+        print("\n\n__________________________________________________________________________\n\n")
+        return
+    
+    withdraw_shortlist(shortlist)
+    print(f'Student {student_id} has successfully withdrawn application for position {position_id}')
+    print("\n\n__________________________________________________________________________\n\n")
+
             
 app.cli.add_command(user_cli) # add the group to the cli
 
