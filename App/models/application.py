@@ -26,6 +26,10 @@ class Application(db.Model):
             self.context.setState(ShortListedState())
         elif isinstance(self.context.state, ShortListedState): #Shortlisted -> Accepted / Rejected
             self.context.state.next_decision(newStatus)
+        elif isinstance(self.context.state, ShortListedState()) and newStatus=="applied":
+            self.context.state.previous()
+        elif isinstance(self.context.state, RejectedState()) and newStatus=="shortlisted":
+            self.context.state.previous()
         elif newStatus == "withdrawn" #Student withdraws from position
             self.context.setState(RejectedState())
         self.status = self.context.state.name
