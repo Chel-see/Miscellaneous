@@ -3,7 +3,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
 from App.database import db, create_db
-from App.models import User, Employer, Position, Shortlist, Staff, Student, PositionStatus, RejectedState
+from App.models import User, Employer, Position, Shortlist, Staff, Student, PositionStatus, AppliedState, RejectedState
+
 from App.controllers import (
     create_user,
     get_all_users_json,
@@ -58,6 +59,19 @@ class UserUnitTests(unittest.TestCase):
         assert shortlist.student_id == 1
         assert shortlist.position_id == 2
         assert shortlist.staff_id == 3
+
+    def test_applied_state(self):
+        state = AppliedState()
+        # Check correct name
+        assert state.getStateName() == "applied"
+        # previous() does nothing, but shouldn't error
+        assert state.previous() is None
+        # accept() does nothing but shouldn't error
+        assert state.accept() is None
+        # reject() should not error (even though it needs context for real transition)
+        assert state.reject() is None
+        # withdraw() also returns None without context
+        assert state.withdraw() is None
 
     def test_rejected_state(self):
         state = RejectedState()
