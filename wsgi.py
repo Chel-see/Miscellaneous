@@ -33,9 +33,11 @@ user_cli = AppGroup('user', help='User object commands')
 @user_cli.command("create", help="Creates a user")
 @click.argument("username", default="rob")
 @click.argument("password", default="robpass")
-@click.argument("user_type", default="student")
-def create_user_command(username, password, user_type):
-    result = create_user(username, password, user_type)
+@click.argument("email", default="rob@example.com")
+@click.argument("phone_number", default="1234567890")
+@click.argument("user_type", default="staff")
+def create_user_command(username, password, email, phone_number, user_type):
+    result = create_user(username, password, email, phone_number, user_type)
     if result:
         print(f'{username} created!')
     else:
