@@ -17,7 +17,7 @@ from App.controllers import (
     update_user,
     open_position,
     get_positions_by_employer,
-    add_student_to_shortlist,
+    # add_student_to_shortlist removed
     get_shortlist_by_student,
     decide_shortlist,
     staff_shortlist_student

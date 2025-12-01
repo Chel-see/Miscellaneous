@@ -37,7 +37,7 @@ def create_student(username, password, email, phone_number, degree, resume, dob,
     db.session.add(new_student)
     db.session.commit()
 
-    print(f"Student {username} created!")
+    print(f"Student {new_student.id} created!")
 
     # After creating the student check all positions for eligibility
     positions = Position.query.all()

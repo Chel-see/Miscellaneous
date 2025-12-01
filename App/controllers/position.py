@@ -1,4 +1,5 @@
 from App.models import Position, Employer, Student, Application
+from  App.controllers.shortlist import get_eligible_students
 from App.database import db
 
 def open_position(user_id, title, number_of_positions=1, gpa_requirement=None):
@@ -10,22 +11,23 @@ def open_position(user_id, title, number_of_positions=1, gpa_requirement=None):
     db.session.add(new_position)
     try:
         db.session.commit()
-        getEligibleStudents(new_position)
+        print(f"Position {new_position.id} created successfully!")
+        get_eligible_students(new_position)
         return new_position
     except Exception as e:
         db.session.rollback()
         return None
 
-def getEligibleStudents(position):
-    students = db.session.query(Student).all()
-    eligible_students=[]
-    for student in students:
-        if student.gpa >= position.gpa_requirement or position.gpa_requirement is None:
-            application = Application(student_id=student.id, position_id=position.id)
-            db.session.add(application)
-            eligible_students.append(student)
-    db.session.commit()
-    return eligible_students            
+# def getEligibleStudents(position):
+#     students = db.session.query(Student).all()
+#     eligible_students=[]
+#     for student in students:
+#         if student.gpa >= position.gpa_requirement or position.gpa_requirement is None:
+#             application = Application(student_id=student.id, position_id=position.id)
+#             db.session.add(application)
+#             eligible_students.append(student)
+#     db.session.commit()
+#     return eligible_students            
 
 def get_positions_by_employer(user_id):
     employer = Employer.query.filter_by(id=user_id).first()

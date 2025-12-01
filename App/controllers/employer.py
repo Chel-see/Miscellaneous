@@ -8,6 +8,7 @@ def create_employer(username, password, email, company, phone_number):
   newEmployer = Employer(username, password, email, company, phone_number)
   db.session.add(newEmployer)
   db.session.commit()
+  print(f"Employer '{newEmployer.id}' created successfully!")
   return newEmployer
 
 def decide_shortlist(student_id, position_id, decision):

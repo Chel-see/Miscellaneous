@@ -1,4 +1,5 @@
 from App.database import db
+from App.models.application import Application
 
 from .staff import create_staff,staff_shortlist_student
 from .employer import create_employer
@@ -13,9 +14,17 @@ def initialize():
     create_staff("mary", "marrypass", "marryan@gmail.com","123-3456")   # id=2
     create_student("bob","bobpass","bob@gmail.com","222-3333","Computer Science",
                    "This internship will help me to grow my skills.","2000-05-15",3.5) # id=3
+    # #create_student("hon","honeypass","hon@gmail.com","123-23453","Computer Science",
+    #                "This internship will help me to grow my skills.","2000-05-15",2.5)
+    
+    application=Application(student_id=3,position_id=1) #id=1 # new change added application
+    db.session.add(application)
+    db.session.commit()
+    print(f'Application {application.id} created')
 
     open_position(1,"Web Developer", 2, gpa_requirement=2.5) # id=1
-    staff_shortlist_student(2, 3,1)
+    staff_shortlist_student(2,3,1)
+   
 
    
 

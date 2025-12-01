@@ -1,4 +1,4 @@
-from models.application_state import ApplicationState
+from App.models.application_state import ApplicationState  # App added new change
 
 
 class AcceptedState(ApplicationState):
