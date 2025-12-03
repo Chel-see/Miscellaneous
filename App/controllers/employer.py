@@ -13,7 +13,7 @@ def create_employer(username, password, email, company, phone_number):
 
 def decide_shortlist(student_id, position_id, decision):
 
-  student = Student.query.filter_by(user_id=student_id).first()
+  student = Student.query.get(student_id)
   position = Position.query.filter(Position.id==position_id, Position.number_of_positions > 0).first()
 
   if not student or not position:
@@ -25,11 +25,18 @@ def decide_shortlist(student_id, position_id, decision):
   shortlist = Shortlist.query.filter_by(application_id=application.id, isWithdrawn=False).first()
 
 
-  if shortlist:
-    if decision=="accept":
-      position.update_number_of_positions(position.number_of_positions - 1)
+  # if shortlist:
+  #   if decision=="accept":
+  #     position.update_number_of_positions(position.number_of_positions - 1)
 
-    shortlist.application.next(decision)  # this should heandle checking the decision and updating the state
+  #   shortlist.application.next(decision)  # this should handle checking the decision and updating the state
+  #   db.session.commit()
+  #   return shortlist
+  # return False
+  if shortlist and shortlist.application:
+    if decision == "accept":
+        position.update_number_of_positions(position.number_of_positions - 1)
+
+    shortlist.application.next(decision)
     db.session.commit()
     return shortlist
-  return False

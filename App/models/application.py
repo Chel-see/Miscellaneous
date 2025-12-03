@@ -8,8 +8,6 @@ class Application(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     position_id = db.Column(db.Integer, db.ForeignKey('position.id'), nullable=False)
     status = db.Column(db.String(15), nullable=False)
-
-    # runtime-only state object (not stored in DB)
     state = None  
 
     def __init__(self, student_id, position_id):

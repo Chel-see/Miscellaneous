@@ -11,8 +11,8 @@ class Shortlist(db.Model):  # because an application can exit and be a shortlist
     staff_id = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=False)
     isWithdrawn = db.Column(db.Boolean, default=False)
 
-    application=db.relationship('Application', backref=('shortlist'), lazy=True)
-    staff = db.relationship('Staff', backref=('shortlist'), lazy=True)
+    application=db.relationship('Application', backref="shortlist", uselist=False)
+    staff = db.relationship('Staff', backref="shortlist")
     
 
 

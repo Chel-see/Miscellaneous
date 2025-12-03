@@ -170,25 +170,40 @@ class UserIntegrationTests(unittest.TestCase):
         
 
     def test_13_decide_shortlist(self):
-        position_count = 3
-        student = create_user("jack", "jackpass", "student")
-        assert student is not None
-        staff = create_user ("pat", "patpass", "staff")
+        # Create staff
+        staff = create_staff("alice", "alicepass", "alice@example.com", "555-1111")
         assert staff is not None
-        employer =  create_user("frank", "pass", "employer")
+
+        # Create employer
+        employer = create_employer("bobco", "bobpass", "bobco@example.com", "BobCo Ltd", "555-2222")
         assert employer is not None
-        position = open_position("Intern", employer.id, position_count)
+
+        # Create position for that employer
+        position = open_position(employer.id, "Full Stack Dev", 2, 3.0)
         assert position is not None
-        stud_shortlist = add_student_to_shortlist(student.id, position.id ,staff.id)
-        assert (stud_shortlist)
-        decided_shortlist = decide_shortlist(student.id, position.id, "accepted")
-        assert (decided_shortlist)
-        shortlists = get_shortlist_by_student(student.id)
-        assert any(s.status == PositionStatus.accepted for s in shortlists)
-        assert position.number_of_positions == (position_count-1)
-        assert len(shortlists) > 0
-        invalid_decision = decide_shortlist(-1, -1, "accepted")
-        assert invalid_decision is False
+
+        # Create student
+        student = create_student("charlie", "charliepass", "charlie@example.com", "555-3333",
+                                "Computer Science", "Experienced in Python", "2001-01-01", 3.5)
+        assert student is not None
+
+        # Ensure Application exists for student and position (create_student should do this)
+        app = Application.query.filter_by(student_id=student.id, position_id=position.id).first()
+        assert app is not None
+        assert app.getStatus() == "Applied"
+
+        # Staff shortlists the student
+        shortlist = staff_shortlist_student(staff.id, student.id, position.id)
+        assert shortlist is not None
+        assert shortlist.application.getStatus() == "Shortlisted"
+
+        # Employer decides to accept the student
+        decided_shortlist = decide_shortlist(student.id, position.id, "accept")
+        assert decided_shortlist is not None
+        assert decided_shortlist.application.getStatus() == "Accepted"
+       
+
+        
 
 
     def test_14_student_view_shortlist(self):

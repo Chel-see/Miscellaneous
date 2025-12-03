@@ -2,7 +2,7 @@ from App.database import db
 from App.models.application import Application
 
 from .staff import create_staff,staff_shortlist_student
-from .employer import create_employer
+from .employer import create_employer,decide_shortlist
 from .student import create_student
 from .position import open_position
 
@@ -25,6 +25,9 @@ def initialize():
     
     sl=staff_shortlist_student(2,3,1)
     print("From initialize Status is ",sl.application.getStatus())
+
+    d=decide_shortlist(3,1,"reject")
+    print(d.application.getStatus())
     
     
    

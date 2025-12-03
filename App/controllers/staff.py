@@ -89,6 +89,7 @@ def staff_shortlist_student(staff_id, student_id, position_id):
     if shortlist:
         from App.models.shortlisted_state import ShortListedState
         shortlist.application.set_state(ShortListedState())  # do i have to write commit here ?
+       
   
     # Update parent Application state
     #shortlist.setStatus("shortlisted") # new change , applications status is updated by the application class to the state name.
