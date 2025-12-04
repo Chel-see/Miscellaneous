@@ -7,7 +7,8 @@ from werkzeug.datastructures import  FileStorage
 
 from App.database import init_db
 from App.config import load_config
-from App.views import views
+
+from flask import jsonify
 
 from App.controllers import (
     setup_jwt,
@@ -18,24 +19,35 @@ from App.controllers import (
 
 
 ### NOTE to TECHTONIC MEMBERS: Uncomment this before submission ###
-def add_views(app):
-    for view in views:
-        app.register_blueprint(view)
-
 def create_app(overrides={}):
     app = Flask(__name__, static_url_path='/static')
+    
+    # Load config
     load_config(app, overrides)
+    
+    # CORS
     CORS(app)
+    
+    # Auth / JWT
     add_auth_context(app)
+    
+    # Uploads
     photos = UploadSet('photos', TEXT + DOCUMENTS + IMAGES)
     configure_uploads(app, photos)
-    # add_views(app) # NOTE to TECHTONIC MEMBERS: Uncomment this before submission
+    
+    # **REGISTER ALL BLUEPRINTS**
+    from App.views import views
+    for view in views:
+        app.register_blueprint(view)
+    
+    # Database
     init_db(app)
+    
+    # JWT setup
     jwt = setup_jwt(app)
-    #setup_admin(app)
-    # @jwt.invalid_token_loader
-    # @jwt.unauthorized_loader
-    # def custom_unauthorized_response(error):
-    #     return render_template('401.html', error=error), 401
-    app.app_context().push()
+    @jwt.invalid_token_loader
+    @jwt.unauthorized_loader
+    def custom_unauthorized_response(error):
+        return jsonify({"error": error}), 401  # Use JSON for API
+    
     return app
