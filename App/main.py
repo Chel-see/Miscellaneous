@@ -7,7 +7,7 @@ from werkzeug.datastructures import  FileStorage
 
 from App.database import init_db
 from App.config import load_config
-
+from App.views import views
 
 from App.controllers import (
     setup_jwt,
@@ -18,9 +18,9 @@ from App.controllers import (
 
 
 ### NOTE to TECHTONIC MEMBERS: Uncomment this before submission ###
-# def add_views(app):
-#     for view in views:
-#         app.register_blueprint(view)
+def add_views(app):
+    for view in views:
+        app.register_blueprint(view)
 
 def create_app(overrides={}):
     app = Flask(__name__, static_url_path='/static')
