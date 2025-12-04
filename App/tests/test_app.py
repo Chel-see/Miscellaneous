@@ -78,6 +78,16 @@ class UserUnitTests(unittest.TestCase):
         state = RejectedState()
         name = state.getStateName()
         assert name=="Rejected"
+
+    def test_061_accepted_state(self):
+        state = AcceptedState()
+        name = state.getStateName()
+        assert name=="Accepted"
+    
+    def test_062_shortlisted_state(self):
+        state = ShortListedState()
+        name = state.getStateName()
+        assert name=="Shortlisted"
     
     # pure function no side effects or integrations called
     def test_07_get_json(self):
